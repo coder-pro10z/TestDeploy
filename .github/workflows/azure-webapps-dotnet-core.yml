@@ -1,0 +1,31 @@
+name: Test .NET Build & Deploy
+on: [workflow_dispatch]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+      
+      # Try to restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+        continue-on-error: true  # Don't fail if no .NET project
+      
+      # Try to build
+      - name: Build
+        run: dotnet build --configuration Release
+        continue-on-error: true
+      
+      # Deploy regardless of build (for testing)
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: .
