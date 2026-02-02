@@ -1,0 +1,35 @@
+name: Test Azure Deployment
+on: [workflow_dispatch]  # Manual trigger only
+
+jobs:
+  test-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Get your code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      # 2. Setup .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+      
+      # 3. Publish your app (creates deployable files)
+      - name: Publish Application
+        run: |
+          # Create a simple web page if no .NET project exists
+          if [ -f *.csproj ]; then
+            dotnet publish -c Release -o ./publish
+          else
+            mkdir -p ./publish
+            echo "<h1>Test Deployment Success!</h1><p>Commit: ${{ github.sha }}</p><p>Time: $(date)</p>" > ./publish/index.html
+          fi
+      
+      # 4. DEPLOY TO AZURE (The actual test)
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: ./publish  # Deploy publish folder, not source
