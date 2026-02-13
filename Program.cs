@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+//Create Builder
 var builder = WebApplication.CreateBuilder(args);
 
 // Add basic services
