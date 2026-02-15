@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add basic services
 builder.Services.AddHealthChecks();
 
+//Build app
 var app = builder.Build();
 
 // Enable static files (optional)
