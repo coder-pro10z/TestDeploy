@@ -58,7 +58,7 @@ jobs:
 # - AZURE_WEBAPP_NAME: "your-app-name" (from Azure)
 # - AZURE_PUBLISH_PROFILE: (Paste entire XML from Azure Portal)
 
-# 2. Run the pipeline
+# 2. Run the pipeline-
 # - Commit the YAML file above
 # - Go to GitHub → Actions tab
 # - Click "Deploy to Azure"
